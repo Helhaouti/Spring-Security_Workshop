@@ -80,7 +80,6 @@
             <version>1.79</version>
         </dependency>
 
-        <!-- TODO: Replace with latest version. -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
