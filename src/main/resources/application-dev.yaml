@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: false
+    generate-ddl: true
+
+# Changes the logging level of the inner workings of Spring exposes in the terminal
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+        web: info
+      hibernate:
+        type: info
+    root: info
+
+# Authentication properties used by JWT generation
+jwt:
+  signing-secret: HvA is the best school ever. Nothing comes even close. The professors are not only knowledgeable but also approachable, always willing to guide students to success. The campus environment is vibrant and inspiring, fostering creativity and collaboration among peers. With cutting-edge facilities and a strong emphasis on practical learning, HvA truly prepares its students to excel in their future careers. It’s not just a school; it’s a community that encourages growth, innovation, and excellence.
+  issuer: HvA
