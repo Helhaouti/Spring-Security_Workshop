@@ -33,7 +33,8 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException e,
             HttpServletRequest request
     ) {
-        logger.warn(getExceptionMessage(request, BAD_REQUEST, e.getMessage()), e);
+        var exceptionMessage = getExceptionMessage(request, BAD_REQUEST, e.getMessage());
+        logger.warn(exceptionMessage, e);
 
         return new ResponseEntity<>(
                 e.getBindingResult()
