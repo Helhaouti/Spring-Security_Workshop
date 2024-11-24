@@ -14,10 +14,10 @@ import static nl.hva.springsecuritydemo.config.GenericConfig.PASSWORD_REGEX;
 @Data
 public class UpdateDto {
 
-    @Email(regexp = EMAIL_REGEX, message = "Is invalid.")
-    private String email;
-    @Pattern(regexp = PASSWORD_REGEX, message = "Is invalid.")
-    private String password;
-    private String username;
+  @Email(regexp = EMAIL_REGEX, message = "Is invalid.")
+  private String email;
+  @Pattern(regexp = PASSWORD_REGEX, message = "Is invalid.")
+  private String password;
+  private String username;
 
 }

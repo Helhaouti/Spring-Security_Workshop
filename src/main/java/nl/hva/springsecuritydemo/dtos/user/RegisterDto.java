@@ -17,21 +17,21 @@ import static nl.hva.springsecuritydemo.config.GenericConfig.EMAIL_REGEX;
 @EqualsAndHashCode(callSuper = true)
 public class RegisterDto extends LoginDto {
 
-    @NotBlank(message = "Not provided.")
-    @Email(message = "Is invalid.", regexp = EMAIL_REGEX)
-    private String email;
+  @NotBlank(message = "Not provided.")
+  @Email(message = "Is invalid.", regexp = EMAIL_REGEX)
+  private String email;
 
-    public RegisterDto(String username, String password, String email) {
-        super(username, password);
-        this.email = email;
-    }
+  public RegisterDto(String username, String password, String email) {
+    super(username, password);
+    this.email = email;
+  }
 
-    public User toUser(PasswordEncoder encoder) {
-        return User.builder()
-                .email(getEmail())
-                .password(encoder.encode(getPassword()))
-                .username(getUsername())
-                .build();
-    }
+  public User toUser(PasswordEncoder encoder) {
+    return User.builder()
+      .email(getEmail())
+      .password(encoder.encode(getPassword()))
+      .username(getUsername())
+      .build();
+  }
 
 }

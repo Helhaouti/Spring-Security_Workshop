@@ -29,8 +29,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 /**
  * The security configuration of the application.
- *
- * @author Hamza el Haouti
  */
 @Configuration
 @EnableWebSecurity
@@ -38,73 +36,73 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 
 @SecurityScheme(
-        name = "Authorization",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        in = SecuritySchemeIn.HEADER,
-        scheme = "bearer"
+  name = "Authorization",
+  type = SecuritySchemeType.HTTP,
+  bearerFormat = "JWT",
+  in = SecuritySchemeIn.HEADER,
+  scheme = "bearer"
 )
 public class SecurityConfig {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
-    private final JWTFilter tokenFilter;
+  private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
+  private final JWTFilter tokenFilter;
 
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
+  @Value("${spring.profiles.active}")
+  private String activeProfile;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // No need for CSRF protection, given use of JWT with localstorage.
-        http.csrf(AbstractHttpConfigurer::disable);
-        // Disable default http basic login with a form.
-        http.httpBasic(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable);
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    // No need for CSRF protection, given use of JWT with localstorage.
+    http.csrf(AbstractHttpConfigurer::disable);
+    // Disable default http basic login with a form.
+    http.httpBasic(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable);
 
-        // Enable cors protection for use with web browser.
-        http.cors(Customizer.withDefaults());
+    // Enable cors protection for use with web browser.
+    http.cors(Customizer.withDefaults());
 
-        http.headers(headers -> {
-            // Disable frame options to allow same-origin frames
-            if (activeProfile.equals("dev"))
-                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin);
-        });
+    http.headers(headers -> {
+      // Disable frame options to allow same-origin frames
+      if (activeProfile.equals("dev"))
+        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin);
+    });
 
-        http.authorizeHttpRequests(request -> {
-                    if (activeProfile.equals("dev"))
-                        request.requestMatchers(
-                                AntPathRequestMatcher.antMatcher("/h2-console/**"),
-                                AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
-                                AntPathRequestMatcher.antMatcher("/v3/api-docs/**")
-                        ).permitAll();
+    http.authorizeHttpRequests(request -> {
+        if (activeProfile.equals("dev"))
+          request.requestMatchers(
+            AntPathRequestMatcher.antMatcher("/h2-console/**"),
+            AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+            AntPathRequestMatcher.antMatcher("/v3/api-docs/**")
+          ).permitAll();
 
-                    // Open endpoints
-                    request.requestMatchers(
-                            AntPathRequestMatcher.antMatcher(AUTH_API_BASE + "/**"),
-                            AntPathRequestMatcher.antMatcher("/favicon.ico/")
-                    ).permitAll();
+        // Open endpoints
+        request.requestMatchers(
+          AntPathRequestMatcher.antMatcher(AUTH_API_BASE + "/**"),
+          AntPathRequestMatcher.antMatcher("/favicon.ico/")
+        ).permitAll();
 
-                    // User role endpoints
-                    request.requestMatchers(
-                            AntPathRequestMatcher.antMatcher(USER_API_BASE + "/**")
-                    ).hasRole(ROLE_USER_NAME);
-                })
-                // Set session management to stateless (for JWT)
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS));
+        // User role endpoints
+        request.requestMatchers(
+          AntPathRequestMatcher.antMatcher(USER_API_BASE + "/**")
+        ).hasRole(ROLE_USER_NAME);
+      })
+      // Set session management to stateless (for JWT)
+      .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS));
 
-        // Add JWT token filter
-        http.addFilterBefore(tokenFilter, AuthorizationFilter.class);
+    // Add JWT token filter
+    http.addFilterBefore(tokenFilter, AuthorizationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+  @Bean
+  public AuthenticationManager authenticationManagerBean() {
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
-        provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(passwordEncoder);
+    provider.setUserDetailsService(userService);
+    provider.setPasswordEncoder(passwordEncoder);
 
-        return new ProviderManager(provider);
-    }
+    return new ProviderManager(provider);
+  }
 
 }

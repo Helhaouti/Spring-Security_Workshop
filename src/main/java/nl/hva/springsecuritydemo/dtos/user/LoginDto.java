@@ -18,15 +18,15 @@ import static nl.hva.springsecuritydemo.config.GenericConfig.PASSWORD_REGEX;
 @AllArgsConstructor
 public class LoginDto {
 
-    @NotBlank(message = "Not provided.")
-    String username;
+  @NotBlank(message = "Not provided.")
+  String username;
 
-    @NotBlank(message = "Not provided.")
-    @Pattern(message = "Is invalid.", regexp = PASSWORD_REGEX)
-    String password;
+  @NotBlank(message = "Not provided.")
+  @Pattern(message = "Is invalid.", regexp = PASSWORD_REGEX)
+  String password;
 
-    public UsernamePasswordAuthenticationToken toAuthToken() {
-        return new UsernamePasswordAuthenticationToken(this.getUsername(), this.getPassword());
-    }
+  public UsernamePasswordAuthenticationToken toAuthToken() {
+    return new UsernamePasswordAuthenticationToken(this.getUsername(), this.getPassword());
+  }
 
 }
